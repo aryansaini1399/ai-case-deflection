@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case__c</fullName>
+    <description>The Case this analysis record belongs to. Master-Detail so analyses cascade-delete with their case.</description>
+    <externalId>false</externalId>
+    <label>Case</label>
+    <referenceTo>Case</referenceTo>
+    <relationshipLabel>AI Analyses</relationshipLabel>
+    <relationshipName>AI_Analyses</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
