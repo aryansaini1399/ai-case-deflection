@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Fires when AI has finished classifying a Case. LWCs subscribe via empApi for real-time agent console updates.</description>
+    <eventType>HighVolume</eventType>
+    <label>Case AI Classified</label>
+    <pluralLabel>Case AI Classified Events</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>
