@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >Broadcasts AI classification updates to subscribing LWCs (knowledge suggestions, customer portal, dashboards)</description>
+    <isExposed>true</isExposed>
+    <masterLabel>AI Insights Channel</masterLabel>
+    <lightningMessageFields>
+        <description>The Case Id that was classified</description>
+        <fieldName>caseId</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>AI category</description>
+        <fieldName>category</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>AI priority</description>
+        <fieldName>priority</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>AI sentiment</description>
+        <fieldName>sentiment</fieldName>
+    </lightningMessageFields>
+</LightningMessageChannel>

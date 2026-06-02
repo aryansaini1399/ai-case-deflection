@@ -1,0 +1,16 @@
+<template>
+  <template lwc:if={value}>
+    <span class={badgeClass} title={tooltipText}>
+      <template lwc:if={iconName}>
+        <lightning-icon
+          icon-name={iconName}
+          size="xx-small"
+          variant="inverse"
+          class="slds-m-right_xx-small"
+        >
+        </lightning-icon>
+      </template>
+      {value}
+    </span>
+  </template>
+</template>

@@ -1,0 +1,143 @@
+<template>
+  <lightning-card title="AI Insights" icon-name="utility:einstein">
+    <lightning-button-icon
+      slot="actions"
+      icon-name="utility:refresh"
+      alternative-text="Refresh"
+      title="Refresh"
+      onclick={handleRefresh}
+    >
+    </lightning-button-icon>
+
+    <div class="slds-p-around_medium">
+      <template lwc:if={isLoading}>
+        <div class="slds-text-align_center slds-p-vertical_medium">
+          <lightning-spinner
+            alternative-text="Loading"
+            size="small"
+          ></lightning-spinner>
+        </div>
+      </template>
+
+      <template lwc:elseif={isError}>
+        <div class="slds-text-color_error slds-p-vertical_small">
+          <lightning-icon
+            icon-name="utility:error"
+            size="x-small"
+            variant="error"
+            class="slds-m-right_x-small"
+          >
+          </lightning-icon>
+          {errorMessage}
+        </div>
+      </template>
+
+      <template lwc:elseif={isPending}>
+        <div
+          class="slds-text-color_weak slds-text-align_center slds-p-vertical_medium"
+        >
+          <lightning-icon
+            icon-name="utility:clock"
+            size="small"
+          ></lightning-icon>
+          <p class="slds-m-top_small">AI is analyzing this case&hellip;</p>
+        </div>
+      </template>
+
+      <template lwc:elseif={isFailed}>
+        <div class="slds-text-color_error slds-p-vertical_small">
+          <lightning-icon
+            icon-name="utility:warning"
+            size="x-small"
+            variant="warning"
+            class="slds-m-right_x-small"
+          >
+          </lightning-icon>
+          Classification failed. Click refresh to retry.
+        </div>
+      </template>
+
+      <template lwc:elseif={hasResults}>
+        <div
+          class="slds-grid slds-grid_vertical-align-center slds-wrap slds-m-bottom_medium"
+        >
+          <c-ai-classification-badge
+            type="category"
+            value={category}
+          ></c-ai-classification-badge>
+          <c-ai-classification-badge
+            type="priority"
+            value={priority}
+          ></c-ai-classification-badge>
+          <c-ai-classification-badge
+            type="sentiment"
+            value={sentiment}
+          ></c-ai-classification-badge>
+          <div
+            class="slds-col_bump-left slds-text-body_small slds-text-color_weak"
+          >
+            Confidence: <strong>{confidenceDisplay}</strong>
+          </div>
+        </div>
+
+        <template lwc:if={summary}>
+          <div class="slds-m-bottom_medium">
+            <div class="slds-text-title slds-m-bottom_xx-small">
+              <lightning-icon
+                icon-name="utility:note"
+                size="xx-small"
+                class="slds-m-right_xx-small"
+              >
+              </lightning-icon>
+              Summary
+            </div>
+            <div class="slds-text-body_regular">{summary}</div>
+          </div>
+        </template>
+
+        <template lwc:if={suggestedResponse}>
+          <div class="slds-m-bottom_medium">
+            <div class="slds-text-title slds-m-bottom_xx-small">
+              <lightning-icon
+                icon-name="utility:chat"
+                size="xx-small"
+                class="slds-m-right_xx-small"
+              >
+              </lightning-icon>
+              Suggested Response
+            </div>
+            <div
+              class="suggested-response slds-box slds-box_x-small slds-theme_default"
+            >
+              {suggestedResponse}
+            </div>
+            <div class="slds-m-top_x-small">
+              <lightning-button
+                label="Copy to clipboard"
+                icon-name="utility:copy"
+                variant="neutral"
+                onclick={handleCopy}
+              >
+              </lightning-button>
+            </div>
+          </div>
+        </template>
+
+        <div
+          class="slds-text-body_small slds-text-color_weak slds-border_top slds-p-top_x-small"
+        >
+          Last classified: {lastClassifiedFormatted}
+        </div>
+      </template>
+
+      <template lwc:else>
+        <div
+          class="slds-text-color_weak slds-text-align_center slds-p-vertical_medium"
+        >
+          No AI insights yet. Add a Subject or Description to trigger
+          classification.
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

@@ -1,0 +1,5 @@
+.suggested-response {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-family: var(--lwc-fontFamily, "Salesforce Sans", Arial, sans-serif);
+}
