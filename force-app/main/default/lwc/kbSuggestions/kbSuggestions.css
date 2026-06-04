@@ -1,0 +1,7 @@
+.kb-card {
+  transition: box-shadow 0.15s ease;
+}
+
+.kb-card:hover {
+  box-shadow: var(--lwc-shadowDrag, 0 2px 4px rgba(0, 0, 0, 0.1));
+}

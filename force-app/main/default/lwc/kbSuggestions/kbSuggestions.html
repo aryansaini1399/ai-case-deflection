@@ -1,0 +1,102 @@
+<template>
+  <lightning-card
+    title="Knowledge Suggestions"
+    icon-name="utility:knowledge_base"
+  >
+    <lightning-button-icon
+      slot="actions"
+      icon-name="utility:refresh"
+      alternative-text="Refresh"
+      title="Refresh"
+      onclick={handleRefresh}
+    >
+    </lightning-button-icon>
+
+    <div class="slds-p-around_medium">
+      <template lwc:if={isLoading}>
+        <div class="slds-text-align_center slds-p-vertical_medium">
+          <lightning-spinner
+            alternative-text="Finding articles"
+            size="small"
+          ></lightning-spinner>
+          <p class="slds-m-top_small slds-text-color_weak">
+            Finding relevant articles&hellip;
+          </p>
+        </div>
+      </template>
+
+      <template lwc:elseif={isError}>
+        <div class="slds-text-color_error slds-p-vertical_small">
+          <lightning-icon
+            icon-name="utility:error"
+            size="x-small"
+            variant="error"
+            class="slds-m-right_x-small"
+          >
+          </lightning-icon>
+          {errorMessage}
+        </div>
+      </template>
+
+      <template lwc:elseif={hasSuggestions}>
+        <template for:each={suggestions} for:item="s">
+          <div
+            key={s.articleId}
+            class="kb-card slds-box slds-box_x-small slds-m-bottom_small"
+          >
+            <div class="slds-grid slds-grid_vertical-align-center">
+              <div class="slds-col slds-grow">
+                <a
+                  href="javascript:void(0);"
+                  data-id={s.articleId}
+                  onclick={handleOpenArticle}
+                  class="slds-text-heading_small"
+                >
+                  {s.title}
+                </a>
+              </div>
+              <div class="slds-col slds-no-flex">
+                <span class="slds-badge slds-theme_success" title={s.reasoning}>
+                  {s.scoreDisplay} relevant
+                </span>
+              </div>
+            </div>
+            <div
+              class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small"
+            >
+              {s.category} &middot; {s.helpfulCount} helpful
+            </div>
+            <p class="slds-m-top_x-small">{s.bodySnippet}</p>
+            <div class="slds-m-top_x-small">
+              <lightning-button-icon
+                icon-name="utility:like"
+                alternative-text="Mark helpful"
+                title="Mark helpful"
+                data-id={s.articleId}
+                onclick={handleMarkHelpful}
+                class="slds-m-right_x-small"
+              >
+              </lightning-button-icon>
+              <lightning-button-icon
+                icon-name="utility:copy"
+                alternative-text="Copy article link"
+                title="Copy article link"
+                data-id={s.articleId}
+                onclick={handleCopyLink}
+              >
+              </lightning-button-icon>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <template lwc:else>
+        <div
+          class="slds-text-color_weak slds-text-align_center slds-p-vertical_medium"
+        >
+          No relevant articles found.
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>
