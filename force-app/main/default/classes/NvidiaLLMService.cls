@@ -1,7 +1,7 @@
 public with sharing class NvidiaLLMService implements ILLMService {
   private static final String ENDPOINT = 'callout:NVIDIA_NIM/v1/chat/completions';
   private static final String DEFAULT_MODEL = 'meta/llama-3.3-70b-instruct';
-  private static final Integer DEFAULT_TIMEOUT_MS = 30000;
+  private static final Integer DEFAULT_TIMEOUT_MS = 90000;
   private static final Integer DEFAULT_MAX_TOKENS = 500;
   private static final Decimal DEFAULT_TEMPERATURE = 0.2;
 

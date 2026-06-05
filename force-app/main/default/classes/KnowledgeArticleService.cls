@@ -4,7 +4,7 @@ public with sharing class KnowledgeArticleService {
   private static final Integer MAX_CANDIDATES = 30;
   private static final Integer ARTICLE_SNIPPET_LENGTH = 500;
   private static final Integer UI_SNIPPET_LENGTH = 200;
-  private static final Integer DEFAULT_TIMEOUT_MS = 30000;
+  private static final Integer DEFAULT_TIMEOUT_MS = 90000;
   private static final Integer DEFAULT_MAX_TOKENS = 800;
   private static final Decimal DEFAULT_TEMPERATURE = 0.2;
 
