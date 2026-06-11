@@ -1,0 +1,12 @@
+.customer-portal {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.kb-card {
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.kb-card:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}

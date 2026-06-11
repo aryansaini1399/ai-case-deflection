@@ -1,0 +1,240 @@
+<template>
+  <div class="slds-card slds-p-around_large customer-portal">
+    <div class="slds-text-heading_large slds-m-bottom_small">
+      How can we help?
+    </div>
+    <div
+      class="slds-text-body_regular slds-text-color_weak slds-m-bottom_large"
+    >
+      Describe your issue below. Our AI will look for articles that may help.
+    </div>
+
+    <!-- STATE 1: DESCRIBE -->
+    <template lwc:if={isDescribeState}>
+      <lightning-textarea
+        label="Your issue"
+        placeholder="Example: I can't log in. The password reset email never arrives."
+        value={customerText}
+        onchange={handleTextChange}
+        class="slds-m-bottom_medium"
+      >
+      </lightning-textarea>
+
+      <div class="slds-m-bottom_medium">
+        <lightning-button
+          label="Find help"
+          icon-name="utility:einstein"
+          variant="brand"
+          onclick={handleFindHelp}
+          disabled={isFindHelpDisabled}
+        >
+        </lightning-button>
+      </div>
+
+      <template lwc:if={isLoading}>
+        <div class="slds-text-align_center slds-p-vertical_medium">
+          <lightning-spinner
+            alternative-text="Searching"
+            size="small"
+          ></lightning-spinner>
+          <p class="slds-m-top_small slds-text-color_weak">
+            Looking for relevant articles&hellip;
+          </p>
+        </div>
+      </template>
+    </template>
+
+    <!-- STATE 2: SUGGESTIONS -->
+    <template lwc:if={isSuggestionsState}>
+      <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+        <div class="slds-text-title slds-m-bottom_xx-small">Your issue:</div>
+        <div class="slds-text-body_regular">{customerText}</div>
+      </div>
+
+      <template lwc:if={hasPrediction}>
+        <div
+          class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium"
+        >
+          Looks like this is about:
+          <strong>{prediction.predictedCategory}</strong>
+        </div>
+      </template>
+
+      <template lwc:if={hasArticles}>
+        <div class="slds-text-heading_small slds-m-bottom_small">
+          These articles might help:
+        </div>
+        <template for:each={prediction.articles} for:item="a">
+          <div
+            key={a.articleId}
+            class="slds-box slds-box_x-small slds-m-bottom_small kb-card"
+          >
+            <div class="slds-grid slds-grid_vertical-align-center">
+              <div class="slds-col slds-grow">
+                <div class="slds-text-heading_small">{a.title}</div>
+                <div class="slds-text-body_small slds-text-color_weak">
+                  {a.category}
+                </div>
+              </div>
+              <div class="slds-col slds-no-flex">
+                <span class="slds-badge slds-theme_success" title={a.reasoning}>
+                  {a.scoreDisplay} match
+                </span>
+              </div>
+            </div>
+            <p class="slds-m-top_x-small">{a.bodySnippet}</p>
+            <div class="slds-m-top_x-small">
+              <lightning-button
+                label="Read full article"
+                icon-name="utility:open"
+                variant="neutral"
+                data-id={a.articleId}
+                onclick={handleReadArticle}
+              >
+              </lightning-button>
+            </div>
+          </div>
+        </template>
+
+        <div class="slds-m-vertical_large slds-text-align_center">
+          <lightning-button
+            label="This solved my issue!"
+            icon-name="utility:success"
+            variant="success"
+            onclick={handleDeflected}
+          >
+          </lightning-button>
+          <span class="slds-m-horizontal_small slds-text-color_weak">or</span>
+          <lightning-button
+            label="Still need help"
+            variant="neutral"
+            onclick={handleStillNeedHelp}
+          >
+          </lightning-button>
+        </div>
+      </template>
+
+      <template lwc:else>
+        <div class="slds-text-color_weak slds-p-vertical_medium">
+          No articles found. You can submit your issue directly.
+        </div>
+        <lightning-button
+          label="Submit case"
+          variant="brand"
+          onclick={handleStillNeedHelp}
+        >
+        </lightning-button>
+      </template>
+    </template>
+
+    <!-- STATE 3: COLLECT EMAIL -->
+    <template lwc:if={isCollectEmailState}>
+      <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+        <div class="slds-text-title slds-m-bottom_xx-small">Your issue:</div>
+        <div class="slds-text-body_regular">{customerText}</div>
+      </div>
+      <lightning-input
+        type="email"
+        label="Your email"
+        placeholder="you@example.com"
+        value={customerEmail}
+        onchange={handleEmailChange}
+        required
+        class="slds-m-bottom_medium"
+      >
+      </lightning-input>
+      <div>
+        <lightning-button
+          label="Submit my case"
+          icon-name="utility:send"
+          variant="brand"
+          onclick={handleSubmit}
+          disabled={isSubmitDisabled}
+        >
+        </lightning-button>
+        <lightning-button
+          label="Back"
+          variant="neutral"
+          onclick={handleBack}
+          class="slds-m-left_small"
+        >
+        </lightning-button>
+      </div>
+      <template lwc:if={isSubmitting}>
+        <div class="slds-text-align_center slds-p-vertical_medium">
+          <lightning-spinner
+            alternative-text="Submitting"
+            size="small"
+          ></lightning-spinner>
+        </div>
+      </template>
+    </template>
+
+    <!-- STATE 4: SUBMITTED -->
+    <template lwc:if={isSubmittedState}>
+      <div class="slds-text-align_center slds-p-vertical_large">
+        <lightning-icon
+          icon-name="utility:success"
+          size="large"
+          variant="success"
+        ></lightning-icon>
+        <div class="slds-text-heading_medium slds-m-top_medium">
+          We've got it!
+        </div>
+        <div class="slds-text-body_regular slds-m-top_small">
+          Your case <strong>#{submittedCaseNumber}</strong> has been received.
+        </div>
+        <div class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+          We'll get back to you at <strong>{customerEmail}</strong> within 4
+          business hours.
+        </div>
+        <div class="slds-m-top_large">
+          <lightning-button
+            label="Submit another issue"
+            variant="neutral"
+            onclick={handleStartOver}
+          >
+          </lightning-button>
+        </div>
+      </div>
+    </template>
+
+    <!-- STATE 5: DEFLECTED -->
+    <template lwc:if={isDeflectedState}>
+      <div class="slds-text-align_center slds-p-vertical_large">
+        <lightning-icon
+          icon-name="utility:smiley_and_people"
+          size="large"
+          variant="success"
+        ></lightning-icon>
+        <div class="slds-text-heading_medium slds-m-top_medium">
+          Glad we could help!
+        </div>
+        <div class="slds-text-body_regular slds-m-top_small">
+          Thanks for letting us know. The article has been marked as helpful.
+        </div>
+        <div class="slds-m-top_large">
+          <lightning-button
+            label="Submit another issue"
+            variant="neutral"
+            onclick={handleStartOver}
+          >
+          </lightning-button>
+        </div>
+      </div>
+    </template>
+
+    <!-- ERROR -->
+    <template lwc:if={hasError}>
+      <div class="slds-text-color_error slds-p-vertical_small slds-m-top_small">
+        <lightning-icon
+          icon-name="utility:error"
+          size="x-small"
+          variant="error"
+          class="slds-m-right_x-small"
+        ></lightning-icon>
+        {errorMessage}
+      </div>
+    </template>
+  </div>
+</template>
