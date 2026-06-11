@@ -1,4 +1,10 @@
 <template>
+  <div class="shooting-stars" aria-hidden="true">
+    <span class="shooting-star shooting-star-1"></span>
+    <span class="shooting-star shooting-star-2"></span>
+    <span class="shooting-star shooting-star-3"></span>
+  </div>
+
   <div class="slds-card slds-p-around_large customer-portal">
     <div class="slds-text-heading_large slds-m-bottom_small">
       How can we help?
@@ -64,7 +70,7 @@
         <div class="slds-text-heading_small slds-m-bottom_small">
           These articles might help:
         </div>
-        <template for:each={prediction.articles} for:item="a">
+        <template for:each={decoratedArticles} for:item="a">
           <div
             key={a.articleId}
             class="slds-box slds-box_x-small slds-m-bottom_small kb-card"
@@ -82,14 +88,14 @@
                 </span>
               </div>
             </div>
-            <p class="slds-m-top_x-small">{a.bodySnippet}</p>
+            <p class="slds-m-top_x-small kb-article-body">{a.displayBody}</p>
             <div class="slds-m-top_x-small">
               <lightning-button
-                label="Read full article"
-                icon-name="utility:open"
+                label={a.toggleLabel}
+                icon-name="utility:chevrondown"
                 variant="neutral"
                 data-id={a.articleId}
-                onclick={handleReadArticle}
+                onclick={handleToggleArticle}
               >
               </lightning-button>
             </div>

@@ -20,6 +20,7 @@ export default class CustomerCaseSubmission extends LightningElement {
   @track errorMessage = "";
   @track isLoading = false;
   @track isSubmitting = false;
+  @track expandedArticleId = null;
 
   lastReadArticleId = null;
 
@@ -67,6 +68,19 @@ export default class CustomerCaseSubmission extends LightningElement {
     );
   }
 
+  get decoratedArticles() {
+    if (!this.prediction || !this.prediction.articles) return [];
+    return this.prediction.articles.map((a) => {
+      const isExpanded = a.articleId === this.expandedArticleId;
+      return {
+        ...a,
+        isExpanded,
+        displayBody: isExpanded ? a.body : a.bodySnippet,
+        toggleLabel: isExpanded ? "Show less" : "Read more"
+      };
+    });
+  }
+
   get hasError() {
     return !!this.errorMessage;
   }
@@ -107,11 +121,14 @@ export default class CustomerCaseSubmission extends LightningElement {
     }
   }
 
-  handleReadArticle(event) {
+  handleToggleArticle(event) {
     const articleId = event.currentTarget.dataset.id;
-    this.lastReadArticleId = articleId;
-    const url = `${window.location.origin}/lightning/r/Knowledge_Article__c/${articleId}/view`;
-    window.open(url, "_blank", "noopener");
+    if (this.expandedArticleId === articleId) {
+      this.expandedArticleId = null;
+    } else {
+      this.expandedArticleId = articleId;
+      this.lastReadArticleId = articleId;
+    }
   }
 
   async handleDeflected() {

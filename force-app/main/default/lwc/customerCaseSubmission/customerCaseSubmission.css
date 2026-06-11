@@ -1,12 +1,473 @@
-.customer-portal {
-  max-width: 720px;
-  margin: 0 auto;
+/* ───────── Host: night sky with stars + nebula + shooting stars ─── */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  padding: 4rem 1rem;
+  position: relative;
+  overflow: hidden;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* Deep-sky gradient + 12 star layers + 4 nebula cloud layers */
+  background-color: #050816;
+  background-image:
+    /* ── Dense star field (12 layers, different sizes/positions) ── */
+    radial-gradient(1px 1px at 25px 40px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 120px 90px, #ffffff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 200px 160px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 80px 220px, #d0d0ff, transparent 50%),
+    radial-gradient(2px 2px at 260px 50px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 40px 300px, #ffffff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 180px 280px, #cdd6ff, transparent 50%),
+    radial-gradient(1px 1px at 300px 350px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 60px 140px, #ffffff, transparent 50%),
+    radial-gradient(2px 2px at 220px 220px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 100px 50px, #b4c4ff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 340px 180px, #ffffff, transparent 50%),
+    /* ── Nebula clouds (soft, colorful, slow) ── */
+    radial-gradient(
+        ellipse 60% 40% at 20% 25%,
+        rgba(139, 92, 246, 0.22),
+        transparent 70%
+      ),
+    radial-gradient(
+      ellipse 50% 35% at 78% 70%,
+      rgba(236, 72, 153, 0.15),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 55% 40% at 50% 90%,
+      rgba(59, 130, 246, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 45% 30% at 92% 15%,
+      rgba(168, 85, 247, 0.18),
+      transparent 70%
+    ),
+    /* ── Base sky gradient (deep navy → near black) ── */
+    linear-gradient(180deg, #050816 0%, #0a0a2a 40%, #1a1a3e 80%, #2d1b5e 100%);
+  background-size:
+    230px 230px,
+    270px 270px,
+    310px 310px,
+    340px 340px,
+    400px 400px,
+    180px 180px,
+    220px 220px,
+    260px 260px,
+    290px 290px,
+    350px 350px,
+    380px 380px,
+    320px 320px,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  background-repeat:
+    repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat,
+    repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    no-repeat;
 }
 
+/* ───────── Crescent moon (middle right) ─────────────────────────── */
+
+:host::before {
+  content: "";
+  position: fixed;
+  top: 50%;
+  right: 6%;
+  width: 110px;
+  height: 110px;
+  margin-top: -55px; /* center vertically */
+  background: linear-gradient(135deg, #fff8e7 0%, #f0e6c8 50%, #d4c894 100%);
+  border-radius: 50%;
+  /* The "bite" out of the moon to make a crescent shape + outer glow */
+  box-shadow:
+    inset 32px -10px 0 -4px #0a0a2a,
+    0 0 60px rgba(255, 248, 231, 0.45),
+    0 0 120px rgba(255, 248, 231, 0.22);
+  pointer-events: none;
+  z-index: 0;
+  animation: moonGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes moonGlow {
+  from {
+    box-shadow:
+      inset 32px -10px 0 -4px #0a0a2a,
+      0 0 60px rgba(255, 248, 231, 0.45),
+      0 0 120px rgba(255, 248, 231, 0.22);
+  }
+  to {
+    box-shadow:
+      inset 32px -10px 0 -4px #0a0a2a,
+      0 0 90px rgba(255, 248, 231, 0.65),
+      0 0 170px rgba(255, 248, 231, 0.35);
+  }
+}
+
+/* ───────── Twinkling overlay (extra animated stars) ─────────────── */
+
+:host::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 60px 60px, #ffffff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 240px 140px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 360px 240px, #aac4ff, transparent 50%),
+    radial-gradient(2px 2px at 140px 320px, #ffffff, transparent 50%),
+    radial-gradient(1px 1px at 280px 80px, #ffffff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 90px 380px, #cdd6ff, transparent 50%);
+  background-size:
+    300px 300px,
+    420px 420px,
+    250px 250px,
+    370px 370px,
+    330px 330px,
+    400px 400px;
+  background-repeat: repeat, repeat, repeat, repeat, repeat, repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+  animation: twinkle 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+/* ───────── Shooting stars (3 streaks, staggered timing) ─────────── */
+
+.shooting-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.shooting-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 6px #ffffff,
+    0 0 14px rgba(255, 255, 255, 0.7);
+  opacity: 0;
+}
+
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 120px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85));
+  transform: translateY(-50%);
+  border-radius: 999px;
+}
+
+.shooting-star-1 {
+  top: 12%;
+  left: -10%;
+  animation: shoot 12s ease-in 1s infinite;
+}
+
+.shooting-star-2 {
+  top: 32%;
+  left: -10%;
+  animation: shoot 15s ease-in 6s infinite;
+}
+
+.shooting-star-3 {
+  top: 58%;
+  left: -10%;
+  animation: shoot 17s ease-in 11s infinite;
+}
+
+@keyframes shoot {
+  0% {
+    transform: translate(0, 0) rotate(18deg);
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  15% {
+    transform: translate(125vw, 35vh) rotate(18deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(125vw, 35vh) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+/* ───────── Main card: glassmorphism ─────────────────────────────── */
+
+.customer-portal {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 3rem 2.5rem !important;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 30px 80px rgba(31, 38, 135, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  /* overflow: hidden ensures the lightning-spinner backdrop overlay
+     clips to our rounded corners during loading state */
+  overflow: hidden;
+  animation: cardEntrance 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ───────── Typography: hero heading + subhead ───────────────────── */
+
+.slds-text-heading_large {
+  font-size: 2.75rem !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 60%, #ee0979 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.slds-text-body_regular,
+.slds-text-color_weak {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: #5a5a72 !important;
+}
+
+.slds-text-heading_small,
+.slds-text-title {
+  font-weight: 700 !important;
+  color: #2a2a3e !important;
+  letter-spacing: -0.01em;
+}
+
+/* ───────── KB Cards: hover-react ─────────────────────────────────── */
+
 .kb-card {
-  transition: box-shadow 0.15s ease-in-out;
+  border-radius: 16px !important;
+  border: 1px solid rgba(102, 126, 234, 0.15) !important;
+  border-left: 4px solid #667eea !important;
+  background: linear-gradient(180deg, #fafbff 0%, #f5f7ff 100%) !important;
+  padding: 1.25rem 1.5rem !important;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .kb-card:hover {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.18);
+  border-left-color: #ee0979 !important;
+}
+
+.kb-article-body {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: #4a4a5e;
+  font-size: 0.95rem;
+}
+
+/* Score badges: AI-themed gradient */
+.slds-badge.slds-theme_success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.02em;
+  padding: 0.35rem 0.7rem !important;
+  border-radius: 999px !important;
+}
+
+/* The "Looks like this is about" hint */
+.slds-text-body_small.slds-text-color_weak {
+  font-size: 0.95rem !important;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.08),
+    rgba(238, 9, 121, 0.05)
+  );
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border-left: 3px solid #667eea;
+}
+
+/* ───────── Issue echo box (shows their input) ───────────────────── */
+
+.slds-box.slds-theme_shade {
+  background: linear-gradient(135deg, #f0f4ff 0%, #fef0f7 100%) !important;
+  border: 1px solid rgba(102, 126, 234, 0.15) !important;
+  border-radius: 16px !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+/* ───────── Buttons: solid brand purple + depth shadow ───────────── */
+
+/* Shared button shape tokens */
+lightning-button {
+  --slds-c-button-radius-border: 12px;
+  --slds-c-button-spacing-block-start: 0.65rem;
+  --slds-c-button-spacing-block-end: 0.65rem;
+  --slds-c-button-spacing-inline-start: 1.25rem;
+  --slds-c-button-spacing-inline-end: 1.25rem;
+  --slds-c-button-font-weight: 600;
+  --sds-c-button-radius-border: 12px;
+  --sds-c-button-spacing-block-start: 0.65rem;
+  --sds-c-button-spacing-block-end: 0.65rem;
+  --sds-c-button-spacing-inline-start: 1.25rem;
+  --sds-c-button-spacing-inline-end: 1.25rem;
+  --sds-c-button-font-weight: 600;
+}
+
+/* Brand variant - solid purple matching the heading gradient's center */
+lightning-button[variant="brand"] {
+  --slds-c-button-brand-color-background: #764ba2;
+  --slds-c-button-brand-color-background-hover: #5e3a82;
+  --slds-c-button-brand-color-background-active: #4c2f6b;
+  --slds-c-button-brand-color-border: #764ba2;
+  --slds-c-button-brand-color-border-hover: #5e3a82;
+  --slds-c-button-brand-color-border-active: #4c2f6b;
+  --slds-c-button-brand-text-color: #ffffff;
+  --slds-c-button-brand-text-color-hover: #ffffff;
+  --slds-c-button-brand-text-color-active: #ffffff;
+  --slds-c-button-brand-shadow-focus: 0 0 0 3px rgba(118, 75, 162, 0.4);
+  /* Older token names (for backward compatibility across API versions) */
+  --sds-c-button-brand-color-background: #764ba2;
+  --sds-c-button-brand-color-background-hover: #5e3a82;
+  --sds-c-button-brand-color-background-active: #4c2f6b;
+  --sds-c-button-brand-color-border: #764ba2;
+  --sds-c-button-brand-color-border-hover: #5e3a82;
+  --sds-c-button-brand-text-color: #ffffff;
+  /* Drop shadow for depth - prevents the "faded" look */
+  filter: drop-shadow(0 4px 12px rgba(118, 75, 162, 0.45));
+  transition:
+    filter 0.2s ease,
+    transform 0.15s ease;
+}
+
+lightning-button[variant="brand"]:hover {
+  filter: drop-shadow(0 6px 16px rgba(118, 75, 162, 0.6));
+  transform: translateY(-1px);
+}
+
+/* Success variant (deflection button) */
+lightning-button[variant="success"] {
+  --slds-c-button-success-color-background: #11998e;
+  --slds-c-button-success-color-background-hover: #0f8479;
+  --slds-c-button-success-color-border: #11998e;
+  --slds-c-button-success-text-color: #ffffff;
+  --sds-c-button-success-color-background: #11998e;
+  --sds-c-button-success-color-background-hover: #0f8479;
+  --sds-c-button-success-color-border: #11998e;
+  --sds-c-button-success-text-color: #ffffff;
+  filter: drop-shadow(0 4px 12px rgba(17, 153, 142, 0.45));
+  transition:
+    filter 0.2s ease,
+    transform 0.15s ease;
+}
+
+lightning-button[variant="success"]:hover {
+  filter: drop-shadow(0 6px 16px rgba(17, 153, 142, 0.6));
+  transform: translateY(-1px);
+}
+
+/* ───────── Spinners: brand-tinted ───────────────────────────────── */
+
+lightning-spinner {
+  --sds-c-spinner-color-background: #667eea;
+}
+
+/* ───────── Email input: cleaner look ────────────────────────────── */
+
+lightning-input,
+lightning-textarea {
+  --sds-c-input-radius-border: 12px;
+  --sds-c-input-color-border: rgba(102, 126, 234, 0.25);
+  --sds-c-input-color-border-focus: #667eea;
+  --sds-c-input-shadow-focus: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  --sds-c-textarea-radius-border: 12px;
+  --sds-c-textarea-color-border: rgba(102, 126, 234, 0.25);
+  --sds-c-textarea-color-border-focus: #667eea;
+}
+
+/* ───────── Final-state celebrations ─────────────────────────────── */
+
+.slds-text-heading_medium {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Large icons in submitted/deflected states */
+lightning-icon[size="large"] {
+  --sds-c-icon-color-foreground: #11998e;
+  --sds-c-icon-color-foreground-default: #11998e;
+  filter: drop-shadow(0 6px 16px rgba(17, 153, 142, 0.3));
+}
+
+/* ───────── Error styling ────────────────────────────────────────── */
+
+.slds-text-color_error {
+  background: linear-gradient(
+    135deg,
+    rgba(238, 9, 121, 0.06),
+    rgba(244, 86, 60, 0.06)
+  );
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  color: #c0265b !important;
+  border-left: 3px solid #ee0979;
+}
+
+/* ───────── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  :host {
+    padding: 1.5rem 0.75rem;
+  }
+  .customer-portal {
+    padding: 2rem 1.5rem !important;
+    border-radius: 20px;
+  }
+  .slds-text-heading_large {
+    font-size: 2rem !important;
+  }
 }
