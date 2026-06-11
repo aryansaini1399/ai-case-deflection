@@ -138,10 +138,12 @@ public without sharing class CustomerCaseService {
       c.AI_Last_Classified__c = System.now();
     }
 
-    insert c;
+    // Use SYSTEM_MODE so guest users' field-level security does not strip
+    // the AI_* fields - we explicitly populate them and need them persisted.
+    Database.insert(c, AccessLevel.SYSTEM_MODE);
 
     if (hasPrediction) {
-      insert new Case_AI_Analysis__c(
+      Case_AI_Analysis__c audit = new Case_AI_Analysis__c(
         Case__c = c.Id,
         Status__c = 'Success',
         Model_Used__c = (String) preClassification.get('modelUsed'),
@@ -151,6 +153,7 @@ public without sharing class CustomerCaseService {
           preClassification.get('processingTimeMs')
         )
       );
+      Database.insert(audit, AccessLevel.SYSTEM_MODE);
     }
 
     Case inserted = [SELECT CaseNumber FROM Case WHERE Id = :c.Id LIMIT 1];
@@ -159,20 +162,28 @@ public without sharing class CustomerCaseService {
 
   /**
    * Called when the customer says "this article helped" - increments helpful count.
+   *
+   * Uses AccessLevel.SYSTEM_MODE for the update because guest users (Guest User
+   * License) cannot have Edit access on custom objects via permission set.
+   * Read + system-mode-update keeps the perm set assignable while still allowing
+   * this single controlled write.
    */
   @AuraEnabled
   public static void markArticleHelpful(Id articleId) {
     if (articleId == null)
       return;
-    Knowledge_Article__c a = [
+    List<Knowledge_Article__c> records = [
       SELECT Id, Helpful_Count__c
       FROM Knowledge_Article__c
       WHERE Id = :articleId AND Is_Published__c = TRUE
       LIMIT 1
     ];
+    if (records.isEmpty())
+      return;
+    Knowledge_Article__c a = records[0];
     Decimal current = a.Helpful_Count__c == null ? 0 : a.Helpful_Count__c;
     a.Helpful_Count__c = current + 1;
-    update a;
+    Database.update(a, AccessLevel.SYSTEM_MODE);
   }
 
   // ── helpers ──────────────────────────────────────────────────
